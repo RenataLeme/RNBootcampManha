@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { Btn } from "./src/components/components/Button";
+import { Btn } from "./src/components/Button";
 import { StyleSheet, Text, View, Image, Alert, TextInput } from "react-native";
 import React from "react";
 import { getParseTreeNode } from "typescript";
-import { Paragraph } from "./src/components/Paragraph";
+import { Paragraph } from "./src/Paragraph";
 
 export default function App() {
   const [name, setName] = useState("");
