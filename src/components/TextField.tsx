@@ -1,27 +1,28 @@
 import React from "react";
 import { TextInput, StyleSheet } from "react-native";
+import styled from "styled-components";
+// import { useState } from "react";
+
+//  const [name, setName] = useState ('');
 
 type TextInputProps = {
-  onChange: () => void;
-  value: "string";
-  placeholder: "string";
+  onChangeText: (text: string) => void;
+  //value: "string"; // sem valor no codigo
+  placeholderText: string;
 };
 
 export function TextField(props: TextInputProps) {
   return (
-    <TextInput
-      style={style.textStyles}
-      onChange={props.onChange}
-      placeholder={props.placeholder}
-      value={props.value}
+    <STextInput
+      onChangeText={props.onChangeText}
+      placeholder={props.placeholderText}
+      //value={props.value}
     />
   );
 }
 
-const style = StyleSheet.create({
-  textStyles: {
-    fontSize: 16,
-    color: "green",
-    padding: 8,
-  },
-});
+const STextInput = styled.TextInput`
+  font-size: 16px;
+  color: "green";
+  padding: 8px;
+`;

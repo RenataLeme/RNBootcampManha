@@ -1,64 +1,111 @@
-import { useState } from "react";
-import { Btn } from "./src/components/Button";
-import { StyleSheet, Text, View, Image, Alert, TextInput } from "react-native";
-import React from "react";
-import { getParseTreeNode } from "typescript";
-import { Paragraph } from "./src/Paragraph";
+// import { Home } from "./src/screens/Home";
+// import { StatusBar } from "expo-status-bar";
+// import { View } from "react-native";
+// import { NotepadCreate } from "./src/screens/NotepadCreate";
+// import { NavigationContainer } from "@react-navigation/native";
+// import { createNativeStackNavigator } from "@react-navigation/native-stack";
+// import { NotepadEdit } from "./src/screens/NotepadEdit";
+// import { NotepadList } from "./src/screens/NotepadList";
+// import { NotepadView } from "./src/screens/NotepadView";
+
+// import screens from "./src/screens.json";
+
+// const Stack = createNativeStackNavigator();
+
+// export default function App() {
+//   return (
+//     <NavigationContainer>
+//       <Stack.Navigator initialRouteName={screens.home}>
+//         {" "}
+//         //drawer
+//         <Stack.Screen name={screens.home} component={Home} />
+//         <Stack.Screen name={screens.NotepadView} component={NotepadView} />
+//         <Stack.Screen name={screens.NotepadCreate} component={NotepadCreate} />
+//         <Stack.Screen name={screens.NotepadEdit} component={NotepadEdit} />
+//         <Stack.Screen name={screens.NotepadList} component={NotepadList} />
+//       </Stack.Navigator>
+//     </NavigationContainer>
+//   );
+// }
+
+import "react-native-gesture-handler";
+import { StatusBar } from "expo-status-bar";
+import { View } from "react-native";
+import { MaterialIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import { Home } from "./src/screens/Home";
+import { NotepadCreate } from "./src/screens/NotepadCreate";
+import { NotepadView } from "./src/screens/NotepadView";
+import { NotepadList } from "./src/screens/NotepadList";
+import { NotepadEdit } from "./src/screens/NotepadEdit";
+import screens from "./src/screens.json";
+
+const Drawer = createDrawerNavigator();
 
 export default function App() {
-  const [name, setName] = useState("");
-  const viewPadding = name.length > 5 ? 20 : 10;
-
   return (
-    <View>
-      <View
-        style={StyleSheet.compose(styles.viewPai, { padding: viewPadding })}
-      >
-        <Text style={styles.sampleText}>Texto para teste de estilo de cor</Text>
-        <TextInput
-          placeholder="Digite seu nome"
-          value={name}
-          onChangeText={(text) => setName(text)}
+    <NavigationContainer>
+      <Drawer.Navigator initialRouteName={screens.home}>
+        <Drawer.Screen
+          name={screens.home}
+          component={Home}
+          options={{
+            drawerIcon({ color, size }) {
+              return <FontAwesome name="home" color={color} size={size} />;
+            },
+          }}
         />
-
-        <Btn title="clicar" onPress={() => Alert.alert("Seu nome é", name)} />
-      </View>
-      <View>
-        <Paragraph>
-          AMIGOS, a consulta aos diversos militantes facilita a criação de todos
-          os recursos funcionais envolvidos.Caros amigos, a consulta aos
-          diversos militantes facilita a criação de todos os recursos funcionais
-          envolvidos.Gostaria de enfatizar que o entendimento das metas
-          propostas representa uma abertura para a melhoria do orçamento
-          setorial.
-        </Paragraph>
-        <Paragraph>
-          Gostaria de enfatizar que o entendimento das metas propostas
-          representa uma abertura para a melhoria do orçamento setorial.A
-          certificação de metodologias que nos auxiliam a lidar com o novo
-          modelo estrutural aqui preconizado afeta positivamente a correta
-          previsão das posturas dos órgãos dirigentes com relação às suas
-          atribuições.
-        </Paragraph>
-      </View>
-    </View>
+        <Drawer.Screen
+          name={screens.notepadView}
+          component={NotepadView}
+          options={{
+            drawerIcon({ size, color }) {
+              return (
+                <FontAwesome name="sticky-note" size={size} color={color} />
+              );
+            },
+          }}
+        />
+        <Drawer.Screen
+          name={screens.notepadCreate}
+          component={NotepadCreate}
+          options={{
+            drawerIcon({ size, color }) {
+              return (
+                <MaterialIcons name="note-add" size={size} color={color} />
+              );
+            },
+          }}
+        />
+        <Drawer.Screen
+          name={screens.notepadEdit}
+          component={NotepadEdit}
+          options={{
+            drawerIcon({ size, color }) {
+              return (
+                <MaterialCommunityIcons
+                  name="note-edit"
+                  size={size}
+                  color={color}
+                />
+              );
+            },
+          }}
+        />
+        <Drawer.Screen
+          name={screens.notepadList}
+          component={NotepadList}
+          options={{
+            drawerIcon({ color, size }) {
+              return <FontAwesome name="list-alt" size={size} color={color} />;
+            },
+          }}
+        />
+      </Drawer.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  viewPai: {
-    padding: 68,
-    marginVertical: 86,
-    marginRight: 60,
-    backgroundColor: "yellow",
-    display: "flex",
-    flexDirection: "column",
-    width: "100",
-    height: "100",
-  },
-  sampleText: {
-    color: "green",
-    paddingBottom: 140,
-    fontWeight: "800",
-  },
-});
