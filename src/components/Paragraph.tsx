@@ -4,8 +4,9 @@ import styled from "styled-components/native";
 export const ParagraphMasters = styled.Text`
   font-size: 18px;
   line-height: 24px;
-  color: #34495e;
-  margin-vertical: 8px;
+  color: #1a2a3b;
+  margin-vertical: 12px;
+  padding-top: 10px;
 `;
 
 type ParagraphProps = {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { View, Text, FlatList, Alert } from "react-native";
+import { View, Text, FlatList } from "react-native";
 import type { ParamListBase } from "@react-navigation/native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { NotepadItem } from "../components/NotepadItem";
@@ -24,21 +24,23 @@ export function NotepadList({
   }, []);
 
   return (
-    <FlatList
-      data={notepads}
-      keyExtractor={({ id }) => id.toLocaleString()}
-      renderItem={({ item }) => {
-        return (
-          <NotepadItem
-            notepad={item}
-            onPress={() => {
-              navigation.navigate(screens.notepadView, {
-                id: item.id,
-              });
-            }}
-          />
-        );
-      }}
-    />
+    <View>
+      <FlatList
+        data={notepads}
+        keyExtractor={({ id }) => id.toLocaleString()}
+        renderItem={({ item }) => {
+          return (
+            <NotepadItem
+              notepad={item}
+              onPress={() => {
+                navigation.navigate(screens.notepadView, {
+                  id: item.id,
+                });
+              }}
+            />
+          );
+        }}
+      />
+    </View>
   );
 }

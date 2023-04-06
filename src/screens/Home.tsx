@@ -1,109 +1,131 @@
-import { useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Button,
-  Alert,
-  TextInput,
-  Image,
-} from "react-native";
-import { Paragraph, ParagraphMasters } from "../components/Paragraph";
-import { FontAwesome5 } from "@expo/vector-icons";
-import { TextField } from "../components/TextField";
-import { Btn } from "../components/Button";
-import {
-  TitleDescriptionBasic,
-  TitleDescriptionMasters,
-} from "../components/TitleDescription";
-import { Ionicons } from "@expo/vector-icons";
+import styled from "styled-components";
+import { StyleSheet } from "react-native";
+import MapView, { PROVIDER_GOOGLE, MapMarker } from "react-native-maps";
 import type { ParamListBase } from "@react-navigation/native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
+import * as Location from "expo-location";
+import { useEffect, useState } from "react";
 import screens from "../screens.json";
+import Toast from "react-native-root-toast";
+import { api } from "../api";
+import type { Notepad } from "../types";
 
-export function Home({ navigation }: NativeStackScreenProps<ParamListBase>) {
-  const [name, setName] = useState("");
-  const viewPadding = name.length > 5 ? 20 : 10;
+const Container = styled.View`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex: 1;
+`;
+
+const initialNotepads: Notepad[] = [];
+
+type coords = {
+  latitude: number | null;
+  longitude: number | null;
+};
+
+const initialRegion = {
+  loatitude: 0,
+  longitude: 0,
+  longitudeDelta: 0.05,
+  latitudeDelta: 0.05,
+};
+const notepadIcon = require("../../assets/notepad.png");
+console.log(notepadIcon);
+
+function delay(seconds) {
+  return new Promise((resolve) => setTimeout(resolve, seconds * 1000));
+}
+
+export function Home({ navigation, route }: NativeStackScreenProps<any>) {
+  const coords = route.params?.coords;
+  const [notepads, setNotepads] = useState(initialNotepads);
+  const [region, setRegion] = useState(initialRegion);
+
+  useEffect(() => {
+    Location.requestForegroundPermissionsAsync().then(async (response) => {
+      if (response.status === "granted") {
+        await delay(2);
+        const position = await Location.getCurrentPositionAsync();
+        setRegion({
+          ...region,
+          ...position.coords,
+        });
+      } else {
+        Toast.show("Necessário ter acesso a Geolocalização");
+      }
+    });
+
+    const unsubscribe = navigation.addListener("focus", async () => {
+      const { data } = await api.get<Notepad[]>("/notepads");
+      setNotepads(data);
+    });
+
+    return unsubscribe;
+  }, []);
+
+  useEffect(() => {
+    if (
+      coords !== undefined &&
+      coords.latitude !== null &&
+      coords.longitude !== null
+    ) {
+      setRegion({
+        ...region,
+        ...coords,
+      });
+    }
+  }, [coords]);
 
   return (
-    <View
-      style={{
-        paddingTop: 50,
-      }}
-    >
-      <FontAwesome5
-        name="cat"
-        size={80}
-        color="#f1c40f"
-        // style={{ position: "absolute", zIndex: 10, top: 160, left: 140 }}
-      />
-      {/* <Image
-        source={{
-          uri: "https://animecomics.com.br/animecomics/images/upload/405.jpg",
-          width: 620,
-          height: 473,
+    <Container>
+      <MapView
+        onLongPress={(event) => {
+          const coords = event.nativeEvent.coordinate;
+          navigation.navigate(screens.notepadCreate, {
+            coords,
+          });
         }}
-      />
-
-      <Image source={require("./assets/favicon.png")} /> */}
-      <View>
-        <TitleDescriptionMasters
-          title="Nunca é demais lembrar o peso e o significado"
-          description="Ainda assim, existem dúvidas a respeito de como a competitividade nas transações comerciais auxilia a preparação e a composição do sistema de participação geral."
-        />
-      </View>
-      <View
-        style={StyleSheet.compose(styles.viewPai, { padding: viewPadding })}
+        style={styles.map}
+        provider={PROVIDER_GOOGLE}
+        // onRegionChangeComplete={region}
+        showsUserLocation
       >
-        <Text style={styles.sampleText}>Texto para teste de estilo de cor</Text>
-        {/* <TextField
-          placeholderText="Digite seu nome:"
-          //value={name}
-          onChangeText={(text) => setName(text)}
-        /> */}
-
-        <Btn
-          title="Criar Notepad"
-          onPress={() => {
-            navigation.navigate(screens.NotepadCreate);
-          }}
-        />
-      </View>
-      <View>
-        <ParagraphMasters>
-          AMIGOS, a consulta aos diversos militantes facilita a criação de todos
-          os recursos funcionais envolvidos.Caros amigos, a consulta aos
-          diversos militantes facilita a criação de todos os recursos funcionais
-          envolvidos.Gostaria de enfatizar que o entendimento das metas
-          propostas representa uma abertura para a melhoria do orçamento
-          setorial.
-        </ParagraphMasters>
-        <ParagraphMasters>
-          Gostaria de enfatizar que o entendimento das metas propostas
-          representa uma abertura para a melhoria do orçamento setorial.A
-          certificação de metodologias que nos auxiliam a lidar com o novo
-          modelo estrutural aqui preconizado afeta positivamente a correta
-          previsão das posturas dos órgãos dirigentes com relação às suas
-          atribuições.
-        </ParagraphMasters>
-      </View>
-    </View>
+        {notepads
+          .filter(
+            ({ latitude, longitude }) => latitude !== null && longitude !== null
+          )
+          .map(({ latitude, longitude, id }) => (
+            <MapMarker
+              onPress={() => {
+                navigation.navigate(screens.notepadView, {
+                  id,
+                });
+              }}
+              key={id}
+              coordinate={{
+                latitude,
+                longitude,
+              }}
+            >
+              {/* <Image
+                source={notepadIcon}
+                resizeMode="contain"
+                style={{
+                  width: 32,
+                  height: 32,
+                }}
+              /> */}
+            </MapMarker>
+          ))}
+      </MapView>
+    </Container>
   );
 }
 
 const styles = StyleSheet.create({
-  viewPai: {
-    padding: 10,
-    marginVertical: 16,
-    display: "flex",
-    flexDirection: "column",
-    writingDirection: "auto",
-    alignItems: "center",
-  },
-
-  sampleText: {
-    color: "green",
-    paddingBottom: 10,
-    fontWeight: "800",
+  map: {
+    width: "100%",
+    height: "100%",
   },
 });

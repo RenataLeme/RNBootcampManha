@@ -1,7 +1,7 @@
 {
   "home": "Home",
-  "NotepadView": "Ver Notepad",
-  "NotepadCreate": "Criar Notepad",
-  "NotepadEdit": "editar Notepad",
-  "NotepadList": "Listar Notepad"
+  "notepadView": "Ver Notepad",
+  "notepadEdit": "Editar Notepad",
+  "notepadList": "Listar Notepad",
+  "notepadCreate": "Criar Notepad"
 }
