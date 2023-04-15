@@ -1,6 +1,5 @@
-import { useEffect, useState, useContext } from "react";
-import { View, Text, ImageBackground, Button } from "react-native";
-import type { ParamListBase } from "@react-navigation/native";
+import { useEffect, useState } from "react";
+import { View, ImageBackground, Button } from "react-native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import screens from "../screens.json";
 import { Title } from "../components/Title";

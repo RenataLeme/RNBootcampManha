@@ -1,13 +1,6 @@
-import {
-  Text,
-  TextInput,
-  TouchableHighlight,
-  TouchableOpacity,
-} from "react-native";
-
-import { useState, useEffect } from "react";
+import { Text, TouchableOpacity, ImageBackground } from "react-native";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components/native";
-import type { ParamListBase } from "@react-navigation/native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import Toast from "react-native-root-toast";
 import { ContainerScreen } from "../components/ContainerScreen";
@@ -58,146 +51,94 @@ export function NotepadCreate({
 
   return (
     <ContainerScreen>
-      <Title
+      <ImageBackground
+        resizeMode="cover"
+        source={require("../../assets/moroccan-flower.png")}
         style={{
-          textAlign: "center",
+          display: "flex",
+          height: "100%",
+          width: "100%",
         }}
       >
-        {texts.title}
-      </Title>
-      <FormContainer>
-        <TextField
-          value={form.title}
-          onChangeText={(title) => setForm({ ...form, title })}
-          placeholder={texts.titlePlaceholder}
-        />
-        <TextField
-          value={form.subtitle}
-          onChangeText={(subtitle) => setForm({ ...form, subtitle })}
-          placeholder={texts.subtitlePlaceholder}
-        />
-        <TextField
-          value={form.latitude.toString()}
-          onChangeText={(latitude) =>
-            setForm({ ...form, latitude: Number(latitude) })
-          }
-          placeholder={texts.latitudePlaceholder}
-        />
-        <TextField
-          value={form.longitude.toString()}
-          onChangeText={(longitude) =>
-            setForm({ ...form, longitude: Number(longitude) })
-          }
-          placeholder={texts.longitudePlaceholder}
-        />
-        <TextField
-          value={form.content}
-          onChangeText={(content) => setForm({ ...form, content })}
-          placeholder={texts.contentPlaceholder}
-          multiline={true}
-          numberOfLines={4}
-        />
-        <TouchableOpacity
-          onPress={async () => {
-            const { data } = await api.post("/notepads", form);
-            if (data.success) {
-              Toast.show("Notepad criado com sucesso!");
-              if (form.latitude && form.longitude) {
-                navigation.navigate(screens.home, {
-                  coords: {
-                    latitude: form.latitude,
-                    longitude: form.longitude,
-                  },
-                });
-              } else {
-                navigation.navigate(screens.notepadList);
-              }
-            } else {
-              Toast.show(data.errors[0].message);
-            }
-          }}
+        <Title
           style={{
-            backgroundColor: "#6f4262",
-            paddingVertical: 8,
-            paddingHorizontal: 12,
-            borderRadius: 8,
+            textAlign: "center",
           }}
         >
-          <Text
+          {texts.title}
+        </Title>
+        <FormContainer>
+          <TextField
+            value={form.title}
+            onChangeText={(title) => setForm({ ...form, title })}
+            placeholder={texts.titlePlaceholder}
+          />
+          <TextField
+            value={form.subtitle}
+            onChangeText={(subtitle) => setForm({ ...form, subtitle })}
+            placeholder={texts.subtitlePlaceholder}
+          />
+          <TextField
+            value={form.latitude.toString()}
+            onChangeText={(latitude) =>
+              setForm({ ...form, latitude: Number(latitude) })
+            }
+            placeholder={texts.latitudePlaceholder}
+          />
+          <TextField
+            value={form.longitude.toString()}
+            onChangeText={(longitude) =>
+              setForm({ ...form, longitude: Number(longitude) })
+            }
+            placeholder={texts.longitudePlaceholder}
+          />
+          <TextField
+            value={form.content}
+            onChangeText={(content) => setForm({ ...form, content })}
+            placeholder={texts.contentPlaceholder}
+            multiline={true}
+            numberOfLines={4}
+          />
+          <TouchableOpacity
+            onPress={async () => {
+              const { data } = await api.post("/notepads", form);
+              if (data.success) {
+                Toast.show("Notepad criado com sucesso!");
+                if (form.latitude && form.longitude) {
+                  navigation.navigate(screens.home, {
+                    coords: {
+                      latitude: form.latitude,
+                      longitude: form.longitude,
+                    },
+                  });
+                } else {
+                  navigation.navigate(screens.notepadList);
+                }
+              } else {
+                Toast.show(data.errors[0].message);
+              }
+            }}
             style={{
-              color: "#b87aa6",
-              fontSize: 14,
-              fontWeight: "bold",
-              textAlign: "center",
-              textTransform: "uppercase",
+              backgroundColor: "#197757",
+              paddingVertical: 8,
+              paddingHorizontal: 12,
+              borderRadius: 8,
             }}
           >
-            {texts.submitButton}
-          </Text>
-        </TouchableOpacity>
-      </FormContainer>
+            <Text
+              style={{
+                color: "#93e9d9",
+                fontSize: 14,
+                fontWeight: "bold",
+                textAlign: "center",
+                textTransform: "uppercase",
+              }}
+            >
+              {texts.submitButton}
+            </Text>
+          </TouchableOpacity>
+        </FormContainer>
+      </ImageBackground>
     </ContainerScreen>
   );
 }
-
-//   return (
-//     <ContainerScreen>
-//       <Title
-//         style={{
-//           textAlign: "center",
-//         }}
-//       >
-//         {texts.title}
-//       </Title>
-//       <FormContainer>
-//         <TextField
-//           value={form.title}
-//           onChangeText={(title) => setForm({ ...form, title })}
-//           placeholder={texts.titlePlaceholder}
-//         />
-//         <TextField
-//           value={form.subtitle}
-//           onChangeText={(subtitle) => setForm({ ...form, subtitle })}
-//           placeholder={texts.subtitlePlaceholder}
-//         />
-//         <TextField
-//           value={form.content}
-//           onChangeText={(content) => setForm({ ...form, content })}
-//           placeholder={texts.contentPlaceholder}
-//           multiline={true}
-//           numberOfLines={4}
-//         />
-//         <TouchableOpacity
-//           onPress={async () => {
-//             const { data } = await api.post("/notepads", form);
-//             if (data.success) {
-//               Toast.show("Notepad criado com sucesso!");
-
-//               navigation.navigate(screens.notepadList);
-//             } else {
-//               Toast.show(data.errors[0].message);
-//             }
-//           }}
-//           style={{
-//             backgroundColor: "#057b3c",
-//             paddingVertical: 8,
-//             paddingHorizontal: 12,
-//             borderRadius: 8,
-//           }}
-//         >
-//           <Text
-//             style={{
-//               color: "#45a281",
-//               fontSize: 14,
-//               fontWeight: "bold",
-//               textAlign: "center",
-//               textTransform: "uppercase",
-//             }}
-//           >
-//             {texts.submitButton}
-//           </Text>
-//         </TouchableOpacity>
-//       </FormContainer>
-//     </ContainerScreen>
-//   );
-// }

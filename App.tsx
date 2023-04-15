@@ -1,7 +1,6 @@
 import "react-native-gesture-handler";
 import { useState, useEffect } from "react";
 import { AppStateContext, initialAppStateContext } from "./src/AppStateContext";
-import { MaterialIcons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { NavigationContainer } from "@react-navigation/native";
@@ -15,6 +14,10 @@ import { NotepadEdit } from "./src/screens/NotepadEdit";
 import screens from "./src/screens.json";
 import { Loader } from "./src/components/Loader";
 import { api } from "./src/api";
+import { Main } from "./src/screens/Main";
+import { AntDesign } from "@expo/vector-icons";
+import { SimpleLineIcons } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
 
 const Drawer = createDrawerNavigator();
 
@@ -47,16 +50,27 @@ export default function App() {
       <AppStateContext.Provider value={appState}>
         <Loader loading={appState.loading} />
         <NavigationContainer>
-          <Drawer.Navigator initialRouteName={screens.home}>
+          <Drawer.Navigator initialRouteName={screens.main}>
+            <Drawer.Screen
+              name={screens.main}
+              component={Main}
+              options={{
+                drawerIcon({ color, size }) {
+                  return <FontAwesome5 name="fly" size={24} color="green" />;
+                },
+              }}
+            />
+
             <Drawer.Screen
               name={screens.home}
               component={Home}
               options={{
                 drawerIcon({ color, size }) {
-                  return <FontAwesome name="home" color={color} size={size} />;
+                  return <AntDesign name="home" size={24} color="green" />;
                 },
               }}
             />
+
             <Drawer.Screen
               name={screens.notepadView}
               component={NotepadView}
@@ -77,7 +91,7 @@ export default function App() {
               options={{
                 drawerIcon({ size, color }) {
                   return (
-                    <MaterialIcons name="note-add" size={size} color={color} />
+                    <SimpleLineIcons name="note" size={24} color="green" />
                   );
                 },
               }}
@@ -106,7 +120,11 @@ export default function App() {
               options={{
                 drawerIcon({ color, size }) {
                   return (
-                    <FontAwesome name="list-alt" size={size} color={color} />
+                    <MaterialCommunityIcons
+                      name="note-text-outline"
+                      size={24}
+                      color="green"
+                    />
                   );
                 },
               }}

@@ -12,7 +12,7 @@ const Backdrop = styled.View`
   top: 0;
   left: 0;
   z-index: 1;
-  background-color: #fff0f9aa;
+  background-color: #b0e7ddaa;
 `;
 
 export type LoaderProps = {

@@ -1,7 +1,6 @@
 import styled from "styled-components";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Image } from "react-native";
 import MapView, { PROVIDER_GOOGLE, MapMarker } from "react-native-maps";
-import type { ParamListBase } from "@react-navigation/native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import * as Location from "expo-location";
 import { useEffect, useState } from "react";
@@ -108,14 +107,14 @@ export function Home({ navigation, route }: NativeStackScreenProps<any>) {
                 longitude,
               }}
             >
-              {/* <Image
+              <Image
                 source={notepadIcon}
                 resizeMode="contain"
                 style={{
-                  width: 32,
-                  height: 32,
+                  width: 30,
+                  height: 30,
                 }}
-              /> */}
+              />
             </MapMarker>
           ))}
       </MapView>
